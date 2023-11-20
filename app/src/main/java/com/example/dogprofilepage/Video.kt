@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,12 +29,11 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
 fun Video(){
@@ -45,41 +43,50 @@ fun Video(){
 
 
     Box {
-        Image(
-            painter = painterResource(id = R.drawable.girl2),
-            contentDescription = "girl2",
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
-            contentScale = ContentScale.Crop
-        )
+        ConstraintLayout(){
 
-        Row {
-            Image(painter = painterResource(id = R.drawable.back),
-                contentDescription = "back",
+            val (firstRow,navbar) = createRefs()
+            val firstRowLine = createGuidelineFromTop(0.05f)
+            val secondRowLine = createGuidelineFromBottom(0.05f)
+
+            Image(
+                painter = painterResource(id = R.drawable.girl2),
+                contentDescription = "girl2",
                 modifier = Modifier
-                    .size(20.dp)
-                    .offset(30.dp, 30.dp))
-            Image(painter = painterResource(id = R.drawable.husky),
-                contentDescription = "husky",
-                modifier = Modifier
-                    .size(120.dp)
-                    .offset(260.dp, 30.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .aspectRatio(0.9f)
-                    .border(
-                        width = 1.5.dp,
-                        color = Color.White,
-                        shape = RoundedCornerShape(16.dp)
-                    ),
+                    .fillMaxSize()
+                    .background(Color.White),
                 contentScale = ContentScale.Crop
             )
-        }
+            Row(modifier = Modifier.fillMaxWidth()
+                                    .constrainAs(firstRow){
+                                        top.linkTo(firstRowLine)
+                                    }){
+                Image(painter = painterResource(id = R.drawable.back), contentDescription ="back",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .offset(30.dp,30.dp)
+                )
+
+                Image(painter = painterResource(id = R.drawable.husky), contentDescription ="husky",
+                    modifier = Modifier
+                        .size(120.dp)
+                        .offset(260.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .aspectRatio(0.9f)
+                        .border(width = 1.dp,
+                            color = Color.White,
+                            shape = RoundedCornerShape(16.dp)
+                            ),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 24.dp)
+                .constrainAs(navbar){
+                    bottom.linkTo(secondRowLine)
+                }
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -92,31 +99,34 @@ fun Video(){
                 }
             )
 
-            // 音量控制图标
-            NavigationIcon(icon = painterResource(id = R.drawable.volume), label = "",
-                onClick = {
-                    isVolumeControlVisible = true
-                })
+                // 音量控制图标
+                NavigationIcon(icon = painterResource(id = R.drawable.volume), label = "",
+                    onClick = {
+                        isVolumeControlVisible = true
+                    })
 
-            // 视频图标
-            NavigationIcon(
-                icon =if(VideoClose) painterResource(id = R.drawable.videoclose)
-                        else painterResource(id = R.drawable.video_solid),
-                label = "Video",
-                onClick = {
-                    VideoClose=!VideoClose
-                })
+                // 视频图标
+                NavigationIcon(
+                    icon =if(VideoClose) painterResource(id = R.drawable.videoclose)
+                    else painterResource(id = R.drawable.video_solid),
+                    label = "Video",
+                    onClick = {
+                        VideoClose=!VideoClose
+                    })
 
-            // 聊天图标
-            NavigationIcon(icon = painterResource(id = R.drawable.chat), label = "chat",)
+                // 聊天图标
+                NavigationIcon(icon = painterResource(id = R.drawable.chat), label = "chat",)
 
-            // 关闭
-            NavigationIcon(icon = painterResource(id = R.drawable.x_solid), label = "close")
+                // 关闭
+                NavigationIcon(icon = painterResource(id = R.drawable.x_solid), label = "close")
+
+            }
+            if (isVolumeControlVisible) {
+                VolumeControlDialog(onClose = { isVolumeControlVisible = false })
+            }
 
         }
-        if (isVolumeControlVisible) {
-            VolumeControlDialog(onClose = { isVolumeControlVisible = false })
-        }
+
     }
 }
 
@@ -164,7 +174,7 @@ fun VolumeControlDialog(onClose: () -> Unit) {
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState()) // 保持垂直滚动状态
             ) {
-                // 添加你的音量控制 UI 元素
+                // 添加音量控制 UI 元素
                 Spacer(modifier = Modifier.height(20.dp))
 
                 // 添加滑动条用于调整音量
@@ -184,10 +194,6 @@ fun VolumeControlDialog(onClose: () -> Unit) {
         }
     )
 }
-
-
-
-
 
 @Preview
 @Composable
