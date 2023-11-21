@@ -1,6 +1,10 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services") version "4.4.0" apply false
+
 }
 
 android {
@@ -50,6 +54,22 @@ android {
 }
 
 dependencies {
+
+    // Dagger - Hilt
+    implementation("com.google.dagger:hilt-android:2.47")
+    implementation("androidx.core:core-ktx:+")
+//    kapt("com.google.dagger:hilt-compiler:2.47")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+
+
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation("com.google.firebase:firebase-analytics")
+
+
 
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01")
     implementation("androidx.core:core-ktx:1.9.0")

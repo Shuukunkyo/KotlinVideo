@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "869132734170",
+    "project_id": "dogprofile-b87e6",
+    "storage_bucket": "dogprofile-b87e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:869132734170:android:b7dab0d8fc4d440e101fe3",
+        "android_client_info": {
+          "package_name": "com.example.dogprofilepage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4tM0v-JREi56S2kkUljilK8B-N-rs5ds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
